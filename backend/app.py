@@ -21,7 +21,7 @@ def create_app():
 
     @app.route("/")
     def home():
-        return {"message": "CampusConnect Backend Running"}
+        return {"message" : "CampusConnect Backend Running"}
 
     return app
 

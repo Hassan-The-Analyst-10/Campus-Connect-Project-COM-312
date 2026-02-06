@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <nav className="bg-green-600 text-white p-4 flex justify-between">
-      <h1 className="font-bold text-lg">CampusConnect</h1>
+     <h1 className="text-1xl md:text-2xl font-bold mb-2 tracking-tight">
+              Campus<span className="text-green-400">Connect</span>
+            </h1>
 
       <div className="space-x-4">
         <Link to="/">Home</Link>
