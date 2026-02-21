@@ -16,13 +16,18 @@ def register():
         name=data["name"],
         email=data["email"],
         password=generate_password_hash(data["password"]),
-        role=data["role"]
+        role=data.get("role", "student")
     )
 
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"message": "User registered successfully"}), 201
+    return jsonify({
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "role": user.role
+    }), 201
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -34,10 +39,8 @@ def login():
         return jsonify({"message": "Invalid credentials"}), 401
 
     return jsonify({
-        "message": "Login successful",
-        "user": {
-            "id": user.id,
-            "name": user.name,
-            "role": user.role
-        }
-    })
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "role": user.role
+    }), 200
