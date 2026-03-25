@@ -4,6 +4,7 @@ import Home from "./user/Home";
 import Login from "./user/Login";
 import Register from "./user/Register";
 import UserDashboard from "./user/UserDashboard";
+import OAuthCallback from "./user/OAuthCallback"; // Import OAuth callback
 
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
@@ -18,6 +19,7 @@ function App() {
         <Route path="/user/login" element={<Login />} />
         <Route path="/user/register" element={<Register />} />
         <Route path="/user/dashboard" element={<UserDashboard />} />
+        <Route path="/oauth/callback" element={<OAuthCallback />} /> {/* OAuth callback */}
 
         {/* Admin routes */}
         <Route path="/admin/login" element={<AdminLogin />} />

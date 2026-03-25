@@ -1,16 +1,22 @@
 from . import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "users"  # ✅ MUST match ForeignKey
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(120))
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), nullable=False)  # student / admin
+    password = db.Column(db.String(255), nullable=True)
+    role = db.Column(db.String(50), default="student")
+    auth_provider = db.Column(db.String(50), default="local")
 
-    requests = db.relationship(
-        "ServiceRequest",
-        back_populates="user",
-        lazy=True
-    )
+    # 🔥 Relationship (fix)
+    requests = db.relationship("ServiceRequest", back_populates="user", cascade="all, delete-orphan")
+
+    # Password helpers
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)

@@ -1,9 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail
+from extensions import db
 
-db = SQLAlchemy()
-mail = Mail()
-
+# Import models so they register
 from .user import User
 from .announcement import Announcement
 from .service_request import ServiceRequest
+from .chat_message import ChatMessage

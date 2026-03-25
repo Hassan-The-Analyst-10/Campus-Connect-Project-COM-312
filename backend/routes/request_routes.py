@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_mail import Message
-from models import db, mail
+from extensions import db, mail
 from models.service_request import ServiceRequest
 from models.user import User
 
