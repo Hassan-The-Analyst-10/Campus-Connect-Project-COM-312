@@ -1,12 +1,19 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from extensions import db   # ✅ FIXED
+
+from extensions import db
 from models.user import User
 
 auth_bp = Blueprint("auth", __name__)
 
-@auth_bp.route("/register", methods=["POST"])
+# =========================
+# REGISTER
+# =========================
+@auth_bp.route("/register", methods=["POST", "OPTIONS"])
 def register():
+    if request.method == "OPTIONS":
+        return "", 200
+
     data = request.json
 
     if User.query.filter_by(email=data["email"]).first():
@@ -29,9 +36,14 @@ def register():
         "role": user.role
     }), 201
 
-
-@auth_bp.route("/login", methods=["POST"])
+# =========================
+# LOGIN
+# =========================
+@auth_bp.route("/login", methods=["POST", "OPTIONS"])
 def login():
+    if request.method == "OPTIONS":
+        return "", 200
+
     data = request.json
     user = User.query.filter_by(email=data["email"]).first()
 

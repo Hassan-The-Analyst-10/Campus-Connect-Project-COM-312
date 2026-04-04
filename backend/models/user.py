@@ -1,8 +1,8 @@
-from . import db
+from extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
-    __tablename__ = "users"  # ✅ MUST match ForeignKey
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
@@ -11,10 +11,8 @@ class User(db.Model):
     role = db.Column(db.String(50), default="student")
     auth_provider = db.Column(db.String(50), default="local")
 
-    # 🔥 Relationship (fix)
     requests = db.relationship("ServiceRequest", back_populates="user", cascade="all, delete-orphan")
 
-    # Password helpers
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
