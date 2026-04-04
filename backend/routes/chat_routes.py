@@ -1,43 +1,20 @@
-from flask import Blueprint, request, jsonify
-from models import db
+# routes/chat_routes.py - REST endpoints for chat
+from flask import Blueprint, jsonify
 from models.chat_message import ChatMessage
 from models.user import User
 
 chat_bp = Blueprint("chat", __name__)
 
-# Get all messages
 @chat_bp.route("/messages", methods=["GET"])
 def get_messages():
-    messages = ChatMessage.query.order_by(ChatMessage.timestamp.asc()).all()
-
+    messages = ChatMessage.query.order_by(ChatMessage.created_at.asc()).limit(100).all()
     return jsonify([
         {
             "id": m.id,
             "content": m.content,
-            "timestamp": m.timestamp.strftime("%H:%M"),
-            "user": {
-                "id": m.user.id,
-                "name": m.user.name
-            }
-        } for m in messages
+            "user_id": m.user_id,
+            "user_name": m.user.name if m.user else "Unknown",
+            "timestamp": m.created_at.isoformat()
+        }
+        for m in messages
     ])
-
-
-# Send a message
-@chat_bp.route("/messages", methods=["POST"])
-def send_message():
-    data = request.json
-
-    user = User.query.get(data["user_id"])
-    if not user:
-        return jsonify({"message": "Invalid user"}), 400
-
-    message = ChatMessage(
-        content=data["content"],
-        user_id=user.id
-    )
-
-    db.session.add(message)
-    db.session.commit()
-
-    return jsonify({"message": "Sent"}), 201

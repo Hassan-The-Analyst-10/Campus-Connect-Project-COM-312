@@ -1,3 +1,4 @@
+# models/service_request.py - Updated with restrictions
 from datetime import datetime
 from . import db
 
@@ -9,9 +10,5 @@ class ServiceRequest(db.Model):
     description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(50), default="Pending")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # 🔥 Foreign key
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-
-    # 🔥 Relationship (must match User.requests)
     user = db.relationship("User", back_populates="requests")
