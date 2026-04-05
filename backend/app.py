@@ -1,6 +1,11 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 from extensions import db, mail
 
@@ -11,14 +16,14 @@ CORS(app, supports_credentials=True, origins=["http://localhost:5173", "http://l
 # =========================
 # CONFIG
 # =========================
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///campus_connect.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///campus_connect.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # Update this
-app.config['MAIL_PASSWORD'] = 'your_password'  # Update this
-app.config['SECRET_KEY'] = 'your-secret-key-here-change-this'
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True') == 'True'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'your_email@gmail.com')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'your_password')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here-change-this')
 
 # =========================
 # INIT EXTENSIONS
@@ -45,7 +50,8 @@ from routes.chat_routes import chat_bp
 from routes.notification_routes import notification_bp
 from routes.user_routes import user_bp
 from routes.help_routes import help_bp
-from routes.admin_routes import admin_bp  # Add admin routes
+from routes.admin_routes import admin_bp
+from ai_chatbot import ai_bp  # Add AI chatbot routes
 
 # Register all blueprints
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
@@ -55,7 +61,8 @@ app.register_blueprint(chat_bp, url_prefix="/api/chat")
 app.register_blueprint(notification_bp, url_prefix="/api/notifications")
 app.register_blueprint(user_bp, url_prefix="/api/users")
 app.register_blueprint(help_bp, url_prefix="/api/help")
-app.register_blueprint(admin_bp, url_prefix="/api/admin")  # Register admin routes
+app.register_blueprint(admin_bp, url_prefix="/api/admin")
+app.register_blueprint(ai_bp, url_prefix="/api/ai")  # Register AI routes
 
 # =========================
 # ROOT ROUTE
@@ -73,7 +80,8 @@ def root():
             "notifications": "/api/notifications/",
             "users": "/api/users/",
             "help": "/api/help/faqs, /api/help/contact",
-            "admin": "/api/admin/users, /api/admin/stats"
+            "admin": "/api/admin/users, /api/admin/stats",
+            "ai": "/api/ai/chat - AI Chatbot Assistant"
         }
     })
 
@@ -130,7 +138,7 @@ with app.app_context():
             Announcement(
                 title="🎉 Welcome to Campus Connect!",
                 message="We're excited to have you on board. This platform helps students collaborate, submit requests, and stay updated with campus announcements.",
-                created_by=2  # admin user
+                created_by=2
             ),
             Announcement(
                 title="💬 New Collaboration Feature Available",
@@ -140,6 +148,11 @@ with app.app_context():
             Announcement(
                 title="📝 Service Request System Update",
                 message="You can now track your service requests in real-time. Maximum 5 pending requests allowed at a time.",
+                created_by=2
+            ),
+            Announcement(
+                title="🤖 AI Assistant is Here!",
+                message="Meet our new AI Assistant! Click the chat icon in the bottom right corner to ask questions, get help, and learn about Campus Connect features.",
                 created_by=2
             )
         ]
@@ -224,6 +237,8 @@ if __name__ == "__main__":
     print("   GET    /api/admin/stats       - Get platform statistics")
     print("   PUT    /api/admin/users/<id>  - Update user")
     print("   POST   /api/admin/users/<id>/block - Block user")
+    print("\n   🤖 AI CHATBOT:")
+    print("   POST   /api/ai/chat           - AI Assistant conversation")
     print("\n✅ Server is ready to accept connections!")
     print("="*60 + "\n")
     

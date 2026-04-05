@@ -3,6 +3,7 @@ import UserSidebar from "./UserSidebar";
 import UserAnnouncements from "./UserAnnouncements";
 import NewRequest from "./NewRequest";
 import StudentCollaboration from "./StudentCollaboration";
+import ChatBot from "../components/ChatBot"; // Add ChatBot import
 
 function UserDashboard() {
   const [page, setPage] = useState("announcements");
@@ -27,17 +28,18 @@ function UserDashboard() {
 
   return (
     <div className="flex min-h-screen">
-      <UserSidebar setPage={setPage}
-  activePage={page}
-  user={user}/>
-
+      <UserSidebar setPage={setPage} activePage={page} user={user} />
+      
       <div className="flex-1 p-6 bg-white">
         <h1 className="text-xl font-semibold mb-4">
           Welcome, {user.name} 👋
         </h1>
-
+        
         {renderPage()}
       </div>
+      
+      {/* AI ChatBot - appears on all user pages */}
+      <ChatBot user={user} />
     </div>
   );
 }

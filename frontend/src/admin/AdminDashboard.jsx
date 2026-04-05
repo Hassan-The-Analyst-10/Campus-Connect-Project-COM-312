@@ -7,6 +7,7 @@ import AdminCollaboration from "./AdminCollaboration";
 import AdminUsers from "./AdminUsers";
 import AdminAnalytics from "./AdminAnalytics";
 import { Users, Clock, Megaphone, MessageCircle, LayoutDashboard } from "lucide-react";
+import ChatBot from "../components/ChatBot"; // Add ChatBot import
 
 function AdminDashboard() {
   const [page, setPage] = useState("dashboard");
@@ -68,6 +69,9 @@ function AdminDashboard() {
         {page === "users" && <AdminUsers />}
         {page === "analytics" && <AdminAnalytics />}
       </div>
+      
+      {/* AI ChatBot - appears on all admin pages */}
+      <ChatBot user={admin} />
     </div>
   );
 }
