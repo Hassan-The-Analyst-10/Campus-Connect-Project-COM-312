@@ -1,6 +1,5 @@
-# models/service_request.py - Updated with restrictions
 from datetime import datetime
-from . import db
+from extensions import db  # Change this line
 
 class ServiceRequest(db.Model):
     __tablename__ = "service_requests"
@@ -11,4 +10,6 @@ class ServiceRequest(db.Model):
     status = db.Column(db.String(50), default="Pending")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    user = db.relationship("User", back_populates="requests")
+    
+    # Relationship
+    user = db.relationship("User", backref="service_requests", foreign_keys=[user_id])

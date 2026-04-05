@@ -1,7 +1,4 @@
+# This file can be empty or just have:
 from extensions import db
 
-# Import models so they register
-from .user import User
-from .announcement import Announcement
-from .service_request import ServiceRequest
-from .chat_message import ChatMessage
+# Don't import models here to avoid circular imports

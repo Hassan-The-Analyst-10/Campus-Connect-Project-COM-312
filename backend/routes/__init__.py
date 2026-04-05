@@ -1,12 +1,17 @@
 from .auth_routes import auth_bp
 from .announcement_routes import announcement_bp
 from .request_routes import request_bp
-from .admin_routes import admin_bp
 from .chat_routes import chat_bp
+from .notification_routes import notification_bp
+from .user_routes import user_bp
+from .help_routes import help_bp
 
-def register_routes(app):
-    app.register_blueprint(auth_bp, url_prefix="/api/auth")
-    app.register_blueprint(announcement_bp, url_prefix="/api/announcements")
-    app.register_blueprint(request_bp, url_prefix="/api/requests")
-    app.register_blueprint(admin_bp, url_prefix="/api/admin")
-    app.register_blueprint(chat_bp, url_prefix="/api/chat")
+__all__ = [
+    'auth_bp',
+    'announcement_bp', 
+    'request_bp',
+    'chat_bp',
+    'notification_bp',
+    'user_bp',
+    'help_bp'
+]

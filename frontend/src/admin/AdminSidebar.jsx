@@ -1,150 +1,118 @@
-import { useState, useRef, useEffect } from "react";
-import { Home, MessageCircle, Megaphone, Users, LogOut } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  MessageCircle, 
+  Megaphone, 
+  Users, 
+  LogOut, 
+  ChevronLeft,
+  CheckSquare,
+  BarChart3,
+  Settings,
+  HelpCircle,
+  Bell
+} from "lucide-react";
+import { useState } from "react";
 
-export default function AdminLayout() {
-  const [page, setPage] = useState("messages");
+function AdminSidebar({ setPage, activePage, admin }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const menuItems = [
+    { label: "Dashboard", icon: <LayoutDashboard size={20} />, key: "dashboard" },
+    { label: "Student Messages", icon: <MessageCircle size={20} />, key: "messages" },
+    { label: "Announcements", icon: <Megaphone size={20} />, key: "announcements" },
+    { label: "Service Requests", icon: <CheckSquare size={20} />, key: "requests" },
+    { label: "Collaboration Hub", icon: <Users size={20} />, key: "collab" },
+    { label: "User Management", icon: <Users size={20} />, key: "users" },
+    { label: "Analytics", icon: <BarChart3 size={20} />, key: "analytics" },
+  ];
 
   const logout = () => {
     localStorage.removeItem("admin");
-    window.location.reload();
+    window.location.href = "/admin/login";
+  };
+
+  const getInitials = () => {
+    if (admin?.role) {
+      return admin.role.substring(0, 2).toUpperCase();
+    }
+    return "AD";
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <AdminSidebar setPage={setPage} logout={logout} />
-      <MainContent page={page} />
-    </div>
-  );
-}
+    <div className={`${isCollapsed ? "w-20" : "w-64"} bg-gradient-to-b from-emerald-800 to-emerald-900 text-white flex flex-col transition-all duration-300 relative shadow-xl`}>
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute -right-3 top-20 bg-emerald-600 rounded-full p-1.5 hover:bg-emerald-500 transition shadow-lg border-2 border-white z-10"
+      >
+        <div className={`transform transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`}>
+          <ChevronLeft size={16} />
+        </div>
+      </button>
 
-function AdminSidebar({ setPage, logout }) {
-  const admin = JSON.parse(localStorage.getItem("admin")) || { role: "Admin" };
-
-  const menu = [
-    { name: "Dashboard", icon: <Home size={18} />, key: "dashboard" },
-    { name: "Messages", icon: <MessageCircle size={18} />, key: "messages" },
-    { name: "Announcements", icon: <Megaphone size={18} />, key: "announcements" },
-    { name: "Requests", icon: <Users size={18} />, key: "requests" },
-  ];
-
-  return (
-    <div className="w-64 bg-gradient-to-b from-green-700 to-green-500 text-white flex flex-col justify-between p-4 shadow-lg">
-      <div>
-        <h2 className="text-xl font-bold mb-6">{admin.role} Panel</h2>
-
-        <div className="space-y-2">
-          {menu.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => setPage(item.key)}
-              className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-white/20 transition"
-            >
-              {item.icon}
-              {item.name}
-            </button>
-          ))}
+      {/* Header */}
+      <div className="p-6 border-b border-emerald-600/30">
+        <div className="flex items-center gap-3">
+          <div className="bg-emerald-500 rounded-xl p-2.5 shadow-lg">
+            <Users size={24} />
+          </div>
+          {!isCollapsed && (
+            <div>
+              <h2 className="text-xl font-bold">Admin Portal</h2>
+              <p className="text-xs text-emerald-200/80">Manage • Monitor • Support</p>
+            </div>
+          )}
         </div>
       </div>
 
-      <button
-        onClick={logout}
-        className="flex items-center gap-2 bg-white text-green-600 px-3 py-2 rounded-lg hover:bg-gray-200"
-      >
-        <LogOut size={18} /> Logout
-      </button>
-    </div>
-  );
-}
-
-function MainContent({ page }) {
-  return (
-    <div className="flex-1 p-4 h-screen">
-      {page === "messages" && <ChatUI />}
-      {page !== "messages" && (
-        <div className="text-gray-600">{page} page coming soon...</div>
-      )}
-    </div>
-  );
-}
-
-function ChatUI() {
-  const [messages, setMessages] = useState([
-    { text: "Hello Admin", sender: "student" },
-    { text: "Hello, how can I help?", sender: "admin" },
-  ]);
-  const [input, setInput] = useState("");
-  const textareaRef = useRef(null);
-
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    setMessages([...messages, { text: input, sender: "admin" }]);
-    setInput("");
-  };
-
-  // Auto expand textarea like WhatsApp
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = "auto";
-      textarea.style.height = textarea.scrollHeight + "px";
-    }
-  }, [input]);
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
-  return (
-    <div className="flex flex-col h-full bg-[#e5ddd5] rounded-xl overflow-hidden shadow">
-      {/* Header */}
-      <div className="bg-green-600 text-white p-3 font-semibold">
-        Student Chat
+      {/* Admin Info */}
+      <div className="px-4 py-4 border-b border-emerald-600/30">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center font-bold shadow-lg">
+              {getInitials()}
+            </div>
+            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 border-2 border-emerald-800 rounded-full" />
+          </div>
+          {!isCollapsed && (
+            <div>
+              <p className="text-sm font-semibold">{admin?.role || "Administrator"}</p>
+              <p className="text-xs text-emerald-200/70">{admin?.email || "admin@campus.com"}</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 p-3 overflow-y-auto space-y-2">
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`flex ${msg.sender === "admin" ? "justify-end" : "justify-start"}`}
+      {/* Menu Items */}
+      <div className="flex-1 overflow-y-auto py-4 px-3">
+        {menuItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={() => setPage(item.key)}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 mb-1 ${
+              activePage === item.key ? "bg-emerald-600 shadow-lg" : "hover:bg-emerald-700/60"
+            }`}
           >
-            <div
-              className={`px-4 py-2 rounded-xl max-w-xs text-sm shadow whitespace-pre-wrap ${
-                msg.sender === "admin"
-                  ? "bg-green-500 text-white"
-                  : "bg-white"
-              }`}
-            >
-              {msg.text}
-            </div>
-          </div>
+            {item.icon}
+            {!isCollapsed && <span className="flex-1 text-left text-sm font-medium">{item.label}</span>}
+            {activePage === item.key && !isCollapsed && (
+              <div className="w-1 h-6 bg-white rounded-full" />
+            )}
+          </button>
         ))}
       </div>
 
-      {/* Input */}
-      <div className="p-2 bg-white">
-        <div className="flex items-end gap-2">
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Type a message"
-            rows={1}
-            className="flex-1 resize-none border rounded-2xl px-4 py-2 outline-none max-h-40 overflow-y-auto"
-          />
-
-          <button
-            onClick={sendMessage}
-            className="bg-green-600 text-white px-4 py-2 rounded-full"
-          >
-            Send
-          </button>
-        </div>
+      {/* Logout Button */}
+      <div className="p-3 border-t border-emerald-600/30">
+        <button
+          onClick={logout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-red-600/20 hover:text-red-400 transition"
+        >
+          <LogOut size={20} />
+          {!isCollapsed && <span className="text-sm font-medium">Logout</span>}
+        </button>
       </div>
     </div>
   );
 }
+
+export default AdminSidebar;
