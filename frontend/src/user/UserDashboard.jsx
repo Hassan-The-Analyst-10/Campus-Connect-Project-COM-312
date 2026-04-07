@@ -31,9 +31,7 @@ function UserDashboard() {
       <UserSidebar setPage={setPage} activePage={page} user={user} />
       
       <div className="flex-1 p-6 bg-white">
-        <h1 className="text-xl font-semibold mb-4">
-          Welcome, {user.name} 👋
-        </h1>
+        {/* Welcome message removed */}
         
         {renderPage()}
       </div>

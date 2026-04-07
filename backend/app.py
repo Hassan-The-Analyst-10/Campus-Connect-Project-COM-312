@@ -51,7 +51,7 @@ from routes.notification_routes import notification_bp
 from routes.user_routes import user_bp
 from routes.help_routes import help_bp
 from routes.admin_routes import admin_bp
-from ai_chatbot import ai_bp  # Add AI chatbot routes
+from ai_chatbot import ai_bp
 
 # Register all blueprints
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
@@ -62,7 +62,7 @@ app.register_blueprint(notification_bp, url_prefix="/api/notifications")
 app.register_blueprint(user_bp, url_prefix="/api/users")
 app.register_blueprint(help_bp, url_prefix="/api/help")
 app.register_blueprint(admin_bp, url_prefix="/api/admin")
-app.register_blueprint(ai_bp, url_prefix="/api/ai")  # Register AI routes
+app.register_blueprint(ai_bp, url_prefix="/api/ai")
 
 # =========================
 # ROOT ROUTE
@@ -113,7 +113,7 @@ with app.app_context():
             password=generate_password_hash("password123"),
             department="Computer Science",
             bio="I'm a test student user",
-            phone="+1234567890"
+            phone="+254741808582"
         )
         db.session.add(test_user)
         print("✓ Test student user created")
@@ -127,38 +127,13 @@ with app.app_context():
             password=generate_password_hash("admin123"),
             department="Administration",
             bio="System Administrator",
-            phone="+1234567890"
+            phone="+254757244172"
         )
         db.session.add(admin_user)
         print("✓ Test admin user created")
     
-    # Create sample announcements if none exist
-    if Announcement.query.count() == 0:
-        sample_announcements = [
-            Announcement(
-                title="🎉 Welcome to Campus Connect!",
-                message="We're excited to have you on board. This platform helps students collaborate, submit requests, and stay updated with campus announcements.",
-                created_by=2
-            ),
-            Announcement(
-                title="💬 New Collaboration Feature Available",
-                message="The Collaboration Hub is now live! You can now chat with other students in real-time and work together on projects.",
-                created_by=2
-            ),
-            Announcement(
-                title="📝 Service Request System Update",
-                message="You can now track your service requests in real-time. Maximum 5 pending requests allowed at a time.",
-                created_by=2
-            ),
-            Announcement(
-                title="🤖 AI Assistant is Here!",
-                message="Meet our new AI Assistant! Click the chat icon in the bottom right corner to ask questions, get help, and learn about Campus Connect features.",
-                created_by=2
-            )
-        ]
-        for announcement in sample_announcements:
-            db.session.add(announcement)
-        print("✓ Sample announcements created")
+    # NO SAMPLE ANNOUNCEMENTS - Removed as requested
+    # Admin can create announcements through the admin panel
     
     # Create sample service requests
     if ServiceRequest.query.count() == 0:

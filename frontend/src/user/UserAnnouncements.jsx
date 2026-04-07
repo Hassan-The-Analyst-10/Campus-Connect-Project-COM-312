@@ -11,7 +11,7 @@ function UserAnnouncements() {
 
   return (
     <div className="mb-6">
-      <h2 className="font-semibold">Announcements</h2>
+      {/* "Announcements" title removed */}
       {announcements.map(a => (
         <div key={a.id} className="border p-2 mb-2">
           <b>{a.title}</b>

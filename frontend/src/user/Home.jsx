@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ChatBot from "../components/ChatBot"; // Import ChatBot
 
 function Home() {
   const heroImages = [
@@ -161,20 +162,11 @@ function Home() {
     }
   ];
 
-  // const partners = [
-  //   { name: "Google", logo: "https://logo.clearbit.com/google.com", industry: "Technology" },
-  //   { name: "Microsoft", logo: "https://logo.clearbit.com/microsoft.com", industry: "Technology" },
-  //   { name: "Amazon", logo: "https://logo.clearbit.com/amazon.com", industry: "E-commerce" },
-  //   { name: "Deloitte", logo: "https://logo.clearbit.com/deloitte.com", industry: "Consulting" },
-  //   { name: "UNESCO", logo: "https://logo.clearbit.com/unesco.org", industry: "Education" },
-  //   { name: "World Bank", logo: "https://logo.clearbit.com/worldbank.org", industry: "Finance" }
-  // ];
-
   const faqs = [
     { q: "Is CampusConnect free for students?", a: "Yes! CampusConnect is completely free for all enrolled students. We believe every student should have access to quality campus engagement tools." },
     { q: "How do I join a club?", a: "Simply browse the clubs section, find one that interests you, and click 'Join Club'. You'll be added automatically and receive notifications about upcoming events." },
     { q: "Can I create my own club?", a: "Absolutely! Any student can create a club. Just submit a proposal through our club creation form, and once approved, you'll have your own club page." },
-  ]
+  ];
 
   return (
     <>
@@ -480,28 +472,6 @@ function Home() {
             </div>
           </div>
 
-          {/* Partners Section */}
-          {/* <div className="mb-32">
-            <div className="text-center mb-12">
-              <div className="inline-block px-6 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
-                🤝 Our Partners
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Trusted by Leading Organizations</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                We collaborate with industry leaders to provide the best opportunities for our students
-              </p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-              {partners.map((partner, index) => (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center">
-                  <img src={partner.logo} alt={partner.name} className="h-12 object-contain mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-gray-800">{partner.name}</p>
-                  <p className="text-xs text-gray-500">{partner.industry}</p>
-                </div>
-              ))}
-            </div>
-          </div> */}
-
           {/* FAQ Section */}
           <div className="mb-32">
             <div className="text-center mb-12">
@@ -556,6 +526,9 @@ function Home() {
           </div>
         </div>
       </div>
+
+      {/* AI ChatBot - Appears on Home Page */}
+      <ChatBot />
 
       {/* Custom Animations */}
       <style jsx>{`
